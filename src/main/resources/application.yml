@@ -9,16 +9,16 @@ spring:
   # mysql
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/yu_ai_code_mother
-    username: root
-    password: 123456
+    url: jdbc:mysql://8.148.195.220:3306/yu_ai_code_mother
+    username: yu_ai
+    password: F6846JxDMsYHFShC
   # redis
   data:
     redis:
-      host: localhost
+      host: 8.148.195.220
       port: 6379
       database: 0
-      password:
+      password: ${REDIS_PASSWORD:your_redis_password}
       ttl: 3600 # 缓存过期时间（秒）
   profiles:
     active: local
