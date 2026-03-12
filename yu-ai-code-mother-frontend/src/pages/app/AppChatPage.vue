@@ -11,7 +11,7 @@
       <div class="header-right">
         <a-button type="default" @click="showAppDetail">
           <template #icon>
-            <InfoCircleOutlined />
+            <InfoCircleOutlined></InfoCircleOutlined>
           </template>
           应用详情
         </a-button>
@@ -23,13 +23,13 @@
             :disabled="!isOwner"
         >
           <template #icon>
-            <DownloadOutlined />
+            <DownloadOutlined></DownloadOutlined>
           </template>
           下载代码
         </a-button>
         <a-button type="primary" @click="deployApp" :loading="deploying">
           <template #icon>
-            <CloudUploadOutlined />
+            <CloudUploadOutlined></CloudUploadOutlined>
           </template>
           部署
         </a-button>
@@ -52,17 +52,17 @@
             <div v-if="message.type === 'user'" class="user-message">
               <div class="message-content">{{ message.content }}</div>
               <div class="message-avatar">
-                <a-avatar :src="loginUserStore.loginUser.userAvatar" />
+                <a-avatar :src="loginUserStore.loginUser.userAvatar"></a-avatar>
               </div>
             </div>
             <div v-else class="ai-message">
               <div class="message-avatar">
-                <a-avatar :src="aiAvatar" />
+                <a-avatar :src="aiAvatar"></a-avatar>
               </div>
               <div class="message-content">
-                <MarkdownRenderer v-if="message.content" :content="message.content" />
+                <MarkdownRenderer v-if="message.content" :content="message.content"></MarkdownRenderer>
                 <div v-if="message.loading" class="loading-indicator">
-                  <a-spin size="small" />
+                  <a-spin size="small"></a-spin>
                   <span>AI 正在思考...</span>
                 </div>
               </div>
@@ -119,7 +119,7 @@
                   :maxlength="1000"
                   @keydown.enter.prevent="sendMessage"
                   :disabled="isGenerating || !isOwner"
-              />
+              ></a-textarea>
             </a-tooltip>
             <a-textarea
                 v-else
@@ -129,7 +129,7 @@
                 :maxlength="1000"
                 @keydown.enter.prevent="sendMessage"
                 :disabled="isGenerating"
-            />
+            ></a-textarea>
             <div class="input-actions">
               <a-button
                   type="primary"
@@ -138,7 +138,7 @@
                   :disabled="!isOwner"
               >
                 <template #icon>
-                  <SendOutlined />
+                  <SendOutlined></SendOutlined>
                 </template>
               </a-button>
             </div>
@@ -159,13 +159,13 @@
                 style="padding: 0; height: auto; margin-right: 12px"
             >
               <template #icon>
-                <EditOutlined />
+                <EditOutlined></EditOutlined>
               </template>
               {{ isEditMode ? '退出编辑' : '编辑模式' }}
             </a-button>
             <a-button v-if="previewUrl" type="link" @click="openInNewTab">
               <template #icon>
-                <ExportOutlined />
+                <ExportOutlined></ExportOutlined>
               </template>
               新窗口打开
             </a-button>
@@ -177,7 +177,7 @@
             <p>网站文件生成完成后将在这里展示</p>
           </div>
           <div v-else-if="isGenerating" class="preview-loading">
-            <a-spin size="large" />
+            <a-spin size="large"></a-spin>
             <p>正在生成网站...</p>
           </div>
           <iframe
@@ -198,14 +198,14 @@
         :show-actions="isOwner || isAdmin"
         @edit="editApp"
         @delete="deleteApp"
-    />
+    ></AppDetailModal>
 
     <!-- 部署成功弹窗 -->
     <DeploySuccessModal
         v-model:open="deployModalVisible"
         :deploy-url="deployUrl"
         @open-site="openDeployedSite"
-    />
+    ></DeploySuccessModal>
   </div>
 </template>
 
@@ -226,7 +226,7 @@ import request from '@/request'
 import MarkdownRenderer from '@/components/MarkdownRenderer.vue'
 import AppDetailModal from '@/components/AppDetailModal.vue'
 import DeploySuccessModal from '@/components/DeploySuccessModal.vue'
-import aiAvatar from '@/assets/aiAvatar.png'
+import aiAvatar from '@/assets/aiAvatar.jpg'
 import { API_BASE_URL, getStaticPreviewUrl } from '@/config/env'
 import { VisualEditor, type ElementInfo } from '@/utils/visualEditor'
 
@@ -383,10 +383,10 @@ const fetchAppInfo = async () => {
       // 检查是否需要自动发送初始提示词
       // 只有在是自己的应用且没有对话历史时才自动发送
       if (
-          appInfo.value.initPrompt &&
-          isOwner.value &&
-          messages.value.length === 0 &&
-          historyLoaded.value
+        appInfo.value.initPrompt &&
+        isOwner.value &&
+        messages.value.length === 0 &&
+        historyLoaded.value
       ) {
         await sendInitialMessage(appInfo.value.initPrompt)
       }
@@ -775,7 +775,40 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   padding: 16px;
-  background: #fdfdfd;
+  background: linear-gradient(135deg, #0a0a0f 0%, #12121a 50%, #1a1a25 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 网格背景 */
+#appChatPage::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+}
+
+/* 发光球体装饰 */
+#appChatPage::after {
+  content: '';
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  background: rgba(0, 240, 255, 0.05);
+  border-radius: 50%;
+  filter: blur(80px);
+  top: -100px;
+  right: -50px;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* 顶部栏 */
@@ -783,7 +816,12 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
+  padding: 12px 24px;
+  background: rgba(18, 18, 26, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+  position: relative;
+  z-index: 10;
 }
 
 .header-left {
@@ -794,13 +832,17 @@ onUnmounted(() => {
 
 .code-gen-type-tag {
   font-size: 12px;
+  background: rgba(0, 240, 255, 0.15) !important;
+  border: 1px solid rgba(0, 240, 255, 0.3) !important;
+  color: #00f0ff !important;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .app-name {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #fff;
 }
 
 .header-right {
@@ -815,6 +857,8 @@ onUnmounted(() => {
   gap: 16px;
   padding: 8px;
   overflow: hidden;
+  position: relative;
+  z-index: 10;
 }
 
 /* 左侧对话区域 */
@@ -822,9 +866,10 @@ onUnmounted(() => {
   flex: 2;
   display: flex;
   flex-direction: column;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(18, 18, 26, 0.6);
+  backdrop-filter: blur(20px);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 240, 255, 0.15);
   overflow: hidden;
 }
 
@@ -862,13 +907,15 @@ onUnmounted(() => {
 }
 
 .user-message .message-content {
-  background: #1890ff;
+  background: linear-gradient(135deg, #00f0ff 0%, #7c3aed 100%);
   color: white;
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3);
 }
 
 .ai-message .message-content {
-  background: #f5f5f5;
-  color: #1a1a1a;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
   padding: 8px 12px;
 }
 
@@ -880,7 +927,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #666;
+  color: #00f0ff;
 }
 
 /* 加载更多按钮 */
@@ -893,15 +940,24 @@ onUnmounted(() => {
 /* 输入区域 */
 .input-container {
   padding: 16px;
-  background: white;
+  background: rgba(18, 18, 26, 0.4);
+  border-top: 1px solid rgba(0, 240, 255, 0.1);
 }
 
 .input-wrapper {
   position: relative;
 }
 
-.input-wrapper .ant-input {
+.input-wrapper :deep(.ant-input) {
   padding-right: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  color: #fff;
+  border-radius: 8px;
+}
+
+.input-wrapper :deep(.ant-input::placeholder) {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .input-actions {
@@ -915,9 +971,10 @@ onUnmounted(() => {
   flex: 3;
   display: flex;
   flex-direction: column;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(18, 18, 26, 0.6);
+  backdrop-filter: blur(20px);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 240, 255, 0.15);
   overflow: hidden;
 }
 
@@ -926,13 +983,14 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.1);
 }
 
 .preview-header h3 {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
+  color: #fff;
 }
 
 .preview-actions {
@@ -952,12 +1010,13 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #666;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .placeholder-icon {
   font-size: 48px;
   margin-bottom: 16px;
+  opacity: 0.6;
 }
 
 .preview-loading {
@@ -966,7 +1025,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #666;
+  color: #00f0ff;
 }
 
 .preview-loading p {
@@ -977,10 +1036,13 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   border: none;
+  background: #fff;
 }
 
 .selected-element-alert {
   margin: 0 16px;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.2);
 }
 
 /* 响应式设计 */
@@ -1044,39 +1106,463 @@ onUnmounted(() => {
     font-family: 'Monaco', 'Menlo', monospace;
     font-size: 14px;
     font-weight: 600;
-    color: #007bff;
+    color: #00f0ff;
   }
 
   .element-id {
-    color: #28a745;
+    color: #7c3aed;
     margin-left: 4px;
   }
 
   .element-class {
-    color: #ffc107;
+    color: #f59e0b;
     margin-left: 4px;
   }
 
   .element-selector-code {
     font-family: 'Monaco', 'Menlo', monospace;
-    background: #f6f8fa;
+    background: rgba(0, 240, 255, 0.1);
     padding: 2px 4px;
     border-radius: 3px;
     font-size: 12px;
-    color: #d73a49;
-    border: 1px solid #e1e4e8;
+    color: #00f0ff;
+    border: 1px solid rgba(0, 240, 255, 0.2);
   }
 
   /* 编辑模式按钮样式 */
   .edit-mode-active {
-    background-color: #52c41a !important;
-    border-color: #52c41a !important;
-    color: white !important;
+    background-color: #00f0ff !important;
+    border-color: #00f0ff !important;
+    color: #0a0a0f !important;
   }
 
   .edit-mode-active:hover {
-    background-color: #73d13d !important;
-    border-color: #73d13d !important;
+    background-color: #33f3ff !important;
+    border-color: #33f3ff !important;
+  }
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ai-avatar {
+  border-color: rgba(0, 240, 255, 0.5);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+
+.ai-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.message-bubble {
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+.user-message .message-bubble {
+  background: linear-gradient(135deg, #00f0ff 0%, #7c3aed 100%);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.ai-message .ai-bubble {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  border-bottom-left-radius: 4px;
+}
+
+.message-content {
+  font-size: 14px;
+}
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(0, 240, 255, 0.8);
+  font-size: 13px;
+}
+
+/* 选中元素信息 */
+.selected-element-alert {
+  margin: 0 16px 16px;
+  background: rgba(0, 240, 255, 0.1) !important;
+  border: 1px solid rgba(0, 240, 255, 0.3) !important;
+}
+
+.selected-element-alert :deep(.ant-alert-message) {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.selected-element-info {
+  line-height: 1.4;
+}
+
+.element-header {
+  margin-bottom: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.element-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: #00f0ff;
+}
+
+.element-id {
+  color: #7c3aed;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.element-class {
+  color: #ec4899;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.element-details {
+  margin-top: 8px;
+}
+
+.element-item {
+  margin-bottom: 4px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.element-selector-code {
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #00f0ff;
+  border: 1px solid rgba(0, 240, 255, 0.2);
+}
+
+/* 输入区域 */
+.input-container {
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(0, 240, 255, 0.1);
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 2px solid rgba(0, 240, 255, 0.5);
+  z-index: 2;
+}
+
+.input-corner-tl {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 8px 0 0 0;
+}
+
+.input-corner-tr {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+  border-radius: 0 8px 0 0;
+}
+
+.input-corner-bl {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+  border-radius: 0 0 0 8px;
+}
+
+.input-corner-br {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+  border-radius: 0 0 8px 0;
+}
+
+.tech-textarea {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  padding: 12px 50px 12px 16px !important;
+  color: #fff !important;
+  font-size: 14px;
+  resize: none;
+}
+
+.tech-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.tech-textarea:hover {
+  border-color: rgba(0, 240, 255, 0.3) !important;
+}
+
+.tech-textarea:focus {
+  border-color: rgba(0, 240, 255, 0.5) !important;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.1) !important;
+}
+
+.input-actions {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+}
+
+.send-btn {
+  background: linear-gradient(135deg, #00f0ff 0%, #7c3aed 100%) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+.send-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 240, 255, 0.5) !important;
+}
+
+/* 右侧预览区域 */
+.preview-section {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  background: rgba(18, 18, 26, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+}
+
+.preview-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title-icon {
+  font-size: 20px;
+}
+
+.preview-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.preview-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.preview-action-btn {
+  color: rgba(255, 255, 255, 0.7) !important;
+  transition: all 0.3s ease !important;
+}
+
+.preview-action-btn:hover {
+  color: #00f0ff !important;
+}
+
+.edit-mode-active {
+  color: #00f0ff !important;
+}
+
+.preview-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.preview-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  padding: 20px;
+}
+
+.placeholder-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.icon-anim {
+  display: inline-block;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.placeholder-hint {
+  margin-top: 12px;
+  font-size: 13px;
+  color: rgba(0, 240, 255, 0.6);
+}
+
+.preview-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.preview-loading p {
+  margin: 20px 0 12px;
+  font-size: 16px;
+}
+
+/* 科技感加载动画 */
+.tech-spinner {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.spinner-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 3px solid transparent;
+  border-top-color: #00f0ff;
+  border-radius: 50%;
+  animation: spin 1.5s linear infinite;
+}
+
+.spinner-ring:nth-child(2) {
+  width: 80%;
+  height: 80%;
+  top: 10%;
+  left: 10%;
+  border-top-color: #7c3aed;
+  animation-duration: 1s;
+  animation-direction: reverse;
+}
+
+.spinner-ring:nth-child(3) {
+  width: 60%;
+  height: 60%;
+  top: 20%;
+  left: 20%;
+  border-top-color: #ec4899;
+  animation-duration: 0.8s;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.loading-dots span {
+  width: 8px;
+  height: 8px;
+  background: #00f0ff;
+  border-radius: 50%;
+  animation: dotPulse 1.4s ease-in-out infinite both;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes dotPulse {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+.preview-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .main-content {
+    flex-direction: column;
+  }
+
+  .chat-section,
+  .preview-section {
+    flex: none;
+    height: 50vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .tech-header {
+    padding: 12px 16px;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .app-name {
+    font-size: 16px;
+  }
+
+  .main-content {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .message-bubble {
+    max-width: 85%;
+  }
+
+  .header-right {
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }
 </style>
