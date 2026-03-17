@@ -1,11 +1,13 @@
 spring:
   application:
-    name: yu-ai-code-mother-backend
+    name: wzj-ai-code-mother-backend
   # session 配置
   session:
     store-type: redis
     # session 30 天过期
     timeout: 2592000
+    redis:
+      namespace: wzj-ai-code-mother:session
   # mysql
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -35,7 +37,7 @@ springdoc:
   group-configs:
     - group: 'default'
       paths-to-match: '/**'
-      packages-to-scan: com.yupi.yuaicodemother.controller
+      packages-to-scan: com.wuzijie.wzjaicodemother.controller
 # knife4j
 knife4j:
   enable: true
@@ -65,7 +67,7 @@ langchain4j:
     reasoning-streaming-chat-model:
       base-url: https://api.deepseek.com
       api-key: ${DEEPSEEK_API_KEY:your_deepseek_api_key}
-      model-name: deepseek-chat
+      model-name: deepseek-reasoner
       max-tokens: 8192
       temperature: 0.7
       log-requests: true
