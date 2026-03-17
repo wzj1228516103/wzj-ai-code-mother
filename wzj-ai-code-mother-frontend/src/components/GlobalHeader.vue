@@ -31,7 +31,7 @@
           <div v-if="loginUserStore.loginUser.id">
             <a-dropdown>
               <a-space class="user-info">
-                <a-avatar :src="loginUserStore.loginUser.userAvatar" class="user-avatar" />
+                <a-avatar :src="displayUserAvatar" :size="36" class="user-avatar" />
                 <span class="user-name">{{ loginUserStore.loginUser.userName ?? '无名' }}</span>
               </a-space>
               <template #overlay>
@@ -62,13 +62,14 @@ import { type MenuProps, message } from 'ant-design-vue'
 import { useLoginUserStore } from '@/stores/loginUser.ts'
 import { userLogout } from '@/api/userController.ts'
 import { LogoutOutlined, HomeOutlined } from '@ant-design/icons-vue'
+import aiAvatar from '@/assets/aiAvatar.jpg'
 
 const loginUserStore = useLoginUserStore()
 const router = useRouter()
 // 当前选中菜单
 const selectedKeys = ref<string[]>(['/'])
 // 监听路由变化，更新当前选中菜单
-router.afterEach((to, from, next) => {
+router.afterEach((to) => {
   selectedKeys.value = [to.path]
 })
 
@@ -119,6 +120,9 @@ const filterMenus = (menus = [] as MenuProps['items']) => {
 // 展示在菜单的路由数组
 const menuItems = computed<MenuProps['items']>(() => filterMenus(originItems))
 
+// 头像兜底，避免默认头像过大或缺失
+const displayUserAvatar = computed(() => loginUserStore.loginUser.userAvatar || aiAvatar)
+
 // 处理菜单点击
 const handleMenuClick: MenuProps['onClick'] = (e) => {
   const key = e.key as string
@@ -135,6 +139,7 @@ const doLogout = async () => {
   if (res.data.code === 0) {
     loginUserStore.setLoginUser({
       userName: '未登录',
+      userAvatar: aiAvatar,
     })
     message.success('退出登录成功')
     await router.push('/user/login')
@@ -152,7 +157,11 @@ const doLogout = async () => {
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(0, 240, 255, 0.2);
   padding: 0 24px;
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  isolation: isolate;
+  overflow: hidden;
 }
 
 .tech-header::after {
@@ -175,6 +184,11 @@ const doLogout = async () => {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.tech-header :deep(.ant-row) {
+  height: 100%;
+  align-items: center;
 }
 
 /* Logo 容器 */
@@ -290,6 +304,10 @@ const doLogout = async () => {
   transition: all 0.3s ease;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  display: inline-flex;
+  align-items: center;
+  max-height: 48px;
+  overflow: hidden;
 }
 
 .user-info:hover {
@@ -301,6 +319,13 @@ const doLogout = async () => {
 .user-avatar {
   border: 2px solid rgba(0, 240, 255, 0.3);
   transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.user-avatar :deep(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .user-info:hover .user-avatar {
@@ -311,6 +336,8 @@ const doLogout = async () => {
 .user-name {
   color: rgba(255, 255, 255, 0.9);
   font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 /* 登录按钮 */

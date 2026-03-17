@@ -47,7 +47,7 @@ const renderedMarkdown = computed(() => {
 <style scoped>
 .markdown-content {
   line-height: 1.6;
-  color: #333;
+  color: rgba(255, 255, 255, 0.92);
   word-wrap: break-word;
 }
 
@@ -61,17 +61,18 @@ const renderedMarkdown = computed(() => {
   margin: 1.5em 0 0.5em 0;
   font-weight: 600;
   line-height: 1.25;
+  color: inherit;
 }
 
 .markdown-content :deep(h1) {
   font-size: 1.5em;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
   padding-bottom: 0.3em;
 }
 
 .markdown-content :deep(h2) {
   font-size: 1.3em;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
   padding-bottom: 0.3em;
 }
 
@@ -81,6 +82,7 @@ const renderedMarkdown = computed(() => {
 
 .markdown-content :deep(p) {
   margin: 0.8em 0;
+  color: inherit;
 }
 
 .markdown-content :deep(ul),
@@ -91,31 +93,34 @@ const renderedMarkdown = computed(() => {
 
 .markdown-content :deep(li) {
   margin: 0.3em 0;
+  color: inherit;
 }
 
 .markdown-content :deep(blockquote) {
   margin: 1em 0;
   padding: 0.5em 1em;
-  border-left: 4px solid #ddd;
-  background-color: #f9f9f9;
-  color: #666;
+  border-left: 4px solid rgba(0, 240, 255, 0.35);
+  background-color: rgba(255, 255, 255, 0.06);
+  color: inherit;
 }
 
 .markdown-content :deep(code) {
-  background-color: #f1f1f1;
+  background-color: rgba(255, 255, 255, 0.08);
   padding: 0.2em 0.4em;
   border-radius: 3px;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.9em;
+  color: inherit;
 }
 
 .markdown-content :deep(pre) {
-  background-color: #f8f8f8;
-  border: 1px solid #e1e1e1;
+  background-color: rgba(55, 65, 81, 0.88);
+  border: 1px solid rgba(148, 163, 184, 0.24);
   border-radius: 6px;
   padding: 1em;
   overflow-x: auto;
   margin: 1em 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .markdown-content :deep(pre code) {
@@ -124,6 +129,7 @@ const renderedMarkdown = computed(() => {
   border-radius: 0;
   font-size: 0.9em;
   line-height: 1.4;
+  color: inherit;
 }
 
 .markdown-content :deep(table) {
@@ -134,18 +140,19 @@ const renderedMarkdown = computed(() => {
 
 .markdown-content :deep(table th),
 .markdown-content :deep(table td) {
-  border: 1px solid #ddd;
+  border: 1px solid rgba(255, 255, 255, 0.16);
   padding: 0.5em 0.8em;
   text-align: left;
+  color: inherit;
 }
 
 .markdown-content :deep(table th) {
-  background-color: #f5f5f5;
+  background-color: rgba(255, 255, 255, 0.08);
   font-weight: 600;
 }
 
 .markdown-content :deep(table tr:nth-child(even)) {
-  background-color: #f9f9f9;
+  background-color: rgba(255, 255, 255, 0.04);
 }
 
 .markdown-content :deep(a) {
@@ -166,13 +173,14 @@ const renderedMarkdown = computed(() => {
 
 .markdown-content :deep(hr) {
   border: none;
-  border-top: 1px solid #eee;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
   margin: 1.5em 0;
 }
 
 /* 代码高亮样式优化 */
 .markdown-content :deep(.hljs) {
-  background-color: #f8f8f8 !important;
+  background-color: rgba(55, 65, 81, 0.88) !important;
+  color: #e5e7eb !important;
   border-radius: 6px;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.9em;
@@ -181,37 +189,37 @@ const renderedMarkdown = computed(() => {
 
 /* 特定语言的代码块样式 */
 .markdown-content :deep(.hljs-keyword) {
-  color: #d73a49;
+  color: #c084fc;
   font-weight: 600;
 }
 
 .markdown-content :deep(.hljs-string) {
-  color: #032f62;
+  color: #86efac;
 }
 
 .markdown-content :deep(.hljs-comment) {
-  color: #6a737d;
+  color: #94a3b8;
   font-style: italic;
 }
 
 .markdown-content :deep(.hljs-number) {
-  color: #005cc5;
+  color: #fbbf24;
 }
 
 .markdown-content :deep(.hljs-function) {
-  color: #6f42c1;
+  color: #60a5fa;
 }
 
 .markdown-content :deep(.hljs-tag) {
-  color: #22863a;
+  color: #fda4af;
 }
 
 .markdown-content :deep(.hljs-attr) {
-  color: #6f42c1;
+  color: #93c5fd;
 }
 
 .markdown-content :deep(.hljs-title) {
-  color: #6f42c1;
+  color: #67e8f9;
   font-weight: 600;
 }
 </style>
