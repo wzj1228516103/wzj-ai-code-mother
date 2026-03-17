@@ -2,10 +2,10 @@
 # @author 子杰
 
 -- 创建库
-create database if not exists yu_ai_code_mother;
+create database if not exists wzj_ai_code;
 
 -- 切换库
-use yu_ai_code_mother;
+use wzj_ai_code;
 
 -- 用户表
 -- 以下是建表语句
