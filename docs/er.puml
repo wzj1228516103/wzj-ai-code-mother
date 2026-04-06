@@ -1,0 +1,52 @@
+@startuml
+' Entities: user, app, chat_history
+entity "user" as user {
+  * id : BIGINT <<PK>>
+  --
+  userAccount : VARCHAR(256)
+  userPassword : VARCHAR(512)
+  userName : VARCHAR(256)
+  userAvatar : VARCHAR(1024)
+  userProfile : VARCHAR(512)
+  userRole : VARCHAR(256)
+  editTime : DATETIME
+  createTime : DATETIME
+  updateTime : DATETIME
+  isDelete : TINYINT
+}
+
+entity "app" as app {
+  * id : BIGINT <<PK>>
+  --
+  appName : VARCHAR(256)
+  cover : VARCHAR(512)
+  initPrompt : TEXT
+  codeGenType : VARCHAR(64)
+  deployKey : VARCHAR(64)
+  deployedTime : DATETIME
+  priority : INT
+  userId : BIGINT <<FK>>
+  editTime : DATETIME
+  createTime : DATETIME
+  updateTime : DATETIME
+  isDelete : TINYINT
+}
+
+entity "chat_history" as chat_history {
+  * id : BIGINT <<PK>>
+  --
+  message : TEXT
+  messageType : VARCHAR(32)
+  appId : BIGINT <<FK>>
+  userId : BIGINT <<FK>>
+  createTime : DATETIME
+  updateTime : DATETIME
+  isDelete : TINYINT
+}
+
+' Relationships
+user ||--o{ app : "creates >"
+user ||--o{ chat_history : "posts >"
+app  ||--o{ chat_history : "has >"
+@enduml
+
