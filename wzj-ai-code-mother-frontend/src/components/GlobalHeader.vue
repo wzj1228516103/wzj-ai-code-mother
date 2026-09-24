@@ -45,9 +45,11 @@
             </a-dropdown>
           </div>
           <div v-else>
-            <a-button type="primary" href="/user/login" class="tech-login-btn">
-              登录
-            </a-button>
+            <RouterLink to="/user/login">
+              <a-button type="primary" class="tech-login-btn">
+                登录
+              </a-button>
+            </RouterLink>
           </div>
         </div>
       </a-col>
